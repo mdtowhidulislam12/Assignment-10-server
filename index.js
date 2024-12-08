@@ -1,15 +1,16 @@
+
 const express = require('express');
 const cors = require('cors');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 const app = express();
 
 //hUn12uCsq56KnqCi
 // towhid-visa
 
 
-const uri = "mongodb+srv://towhid-visa:hUn12uCsq56KnqCi@cluster0.vmume.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const uri = "mongodb+srv://towhid-visa:BZ6H3jG5D3EApF33@database.w3ene.mongodb.net/?retryWrites=true&w=majority&appName=Database";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -29,11 +30,17 @@ async function run() {
         const visaCollection = database.collection("visa");
 
 
-        app.get('/addvisa'), async (req, res) => {
-            const cursor = visaCollection.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        }
+        app.get('/addvisa', async (req, res) => {
+            try {
+                const cursor = visaCollection.find();
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch (error) {
+                console.error("Error fetching visas:", error);
+                res.status(500).send({ message: "Internal Server Error" });
+            }
+        });
+        
 
         app.post('/addvisa', async (req, res) => {
             const visa = req.body;
